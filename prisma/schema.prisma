@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserType {
+  ADMIN
+  PRODUCER
+  SERVICE_PROVIDER
+}
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String?  @unique
+  phone         String
+  password_hash String?
+  user_type     UserType @default(SERVICE_PROVIDER)
+  contacted     Boolean  @default(false)
+  created_at    DateTime @default(now())
+
+  @@map("users")
+}
+
+model News {
+  id    String  @id @default(uuid())
+  title String
+  body  String
+  link  String?
+
+  @@map("news")
+}
+
+model Faqs {
+  id        String   @id @default(uuid())
+  code      Int      @default(0)
+  title     String
+  body      String
+  user_type UserType @default(SERVICE_PROVIDER)
+
+  @@map("faqs")
+}
+
+model Institutional {
+  id        String   @id @default(uuid())
+  code      Int      @default(0)
+  title     String
+  body      String
+  user_type UserType @default(SERVICE_PROVIDER)
+
+  @@map("institutional")
+}
